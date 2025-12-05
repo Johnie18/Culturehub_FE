@@ -7,10 +7,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import Callback from "../auth/callback/page"
+import useAuth from "./hooks/page"
 
 export default function Page({ children }: { children: React.ReactNode }) {
-Callback();
+useAuth();
 
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
 

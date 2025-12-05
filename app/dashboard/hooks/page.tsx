@@ -14,6 +14,7 @@ export default function useAuth(requiredLevel = null) {
     if (!token) {
       router.replace("/auth/login");
       return;
+      
     }
 
     if (requiredLevel !== null && accessLevel !== requiredLevel) {
