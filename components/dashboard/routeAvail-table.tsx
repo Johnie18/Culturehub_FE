@@ -22,92 +22,114 @@ import { useState } from "react";
 
 interface Employee {
   id: string;
-  name: string;
-  email: string;
-  department: string;
-  role: string;
+  date: string;
+  departuretime: string;
+  guest: string;
+  tourguide: string;
+  price: string;
+  notes: string,
   status: "active" | "inactive" | "on-leave";
 }
 
 const sampleEmployees: Employee[] = [
   {
     id: "1",
-    name: "Alice Johnson",
-    email: "alice.johnson@company.com",
-    department: "Engineering",
-    role: "Senior Developer",
+    date: "Alice Johnson",
+    departuretime: "alice.johnson@company.com",
+    guest: "Engineering",
+    tourguide: "",  
+    price: "Senior Developer",
+    notes: "",
     status: "active",
   },
   {
     id: "2",
-    name: "Bob Smith",
-    email: "bob.smith@company.com",
-    department: "Design",
-    role: "UX Designer",
+    date: "Bob Smith",
+    departuretime: "bob.smith@company.com",
+    guest: "Design",
+    tourguide: "",
+    price: "UX Designer",
+    notes:"",
     status: "active",
   },
   {
     id: "3",
-    name: "Carol Williams",
-    email: "carol.williams@company.com",
-    department: "Marketing",
-    role: "Marketing Manager",
+    date: "Carol Williams",
+    departuretime: "carol.williams@company.com",
+    guest: "Marketing",
+    tourguide: "",
+    price: "Marketing Manager",
+    notes: "",
     status: "on-leave",
   },
   {
     id: "4",
-    name: "David Brown",
-    email: "david.brown@company.com",
-    department: "Engineering",
-    role: "DevOps Engineer",
+    date: "David Brown",
+    departuretime: "david.brown@company.com",
+    guest: "Engineering",
+    tourguide:"",
+    price: "DevOps Engineer",
+    notes: "",
     status: "active",
   },
   {
     id: "5",
-    name: "Eve Davis",
-    email: "eve.davis@company.com",
-    department: "Sales",
-    role: "Sales Representative",
+    date: "Eve Davis",
+    departuretime: "eve.davis@company.com",
+    guest: "Sales",
+    tourguide: "",
+    price: "Sales Representative",
+    notes: "",
     status: "inactive",
-  },
+  }, 
   {
     id: "6",
-    name: "Frank Miller",
-    email: "frank.miller@company.com",
-    department: "Engineering",
-    role: "Junior Developer",
+    date: "Frank Miller",
+    departuretime: "frank.miller@company.com",
+    guest: "Engineering",
+    tourguide: "",
+    price: "Junior Developer",
+    notes: "",
     status: "active",
   },
   {
     id: "7",
-    name: "Grace Wilson",
-    email: "grace.wilson@company.com",
-    department: "HR",
-    role: "HR Manager",
+    date: "Grace Wilson",
+    departuretime: "grace.wilson@company.com",
+    guest: "HR",
+    tourguide: "",
+    price: "HR Manager",
+    notes: "",
     status: "active",
   },
   {
     id: "8",
-    name: "Henry Moore",
-    email: "henry.moore@company.com",
-    department: "Finance",
-    role: "Accountant",
+    date: "Henry Moore",
+    departuretime: "henry.moore@company.com",
+    guest: "Finance",
+    tourguide: "",
+    price: "Accountant",
+    notes: "",
     status: "on-leave",
   },
   {
     id: "9",
-    name: "Ivy Taylor",
-    email: "ivy.taylor@company.com",
-    department: "Design",
-    role: "UI Designer",
+    date: "Ivy Taylor",
+    departuretime: "ivy.taylor@company.com",
+    guest: "Design",
+    tourguide:"",
+    price: "UI Designer",
+    notes: "",
     status: "active",
   },
   {
     id: "10",
-    name: "Jack Anderson",
-    email: "jack.anderson@company.com",
-    department: "Engineering",
-    role: "Tech Lead",
+    date: "Jack Anderson",
+    departuretime: "jack.anderson@company.com",
+    guest: "Engineering",
+    tourguide: "",
+    price: "Tech Lead",
+    notes: "",
     status: "inactive",
   },
 ];
@@ -141,12 +163,14 @@ export default function RouteAvailable() {
     const matchesStatus = statusFilter === "all" || employee.status === statusFilter;
 
     // Filter by search query
-    const matchesSearch =
-      searchQuery === "" ||
-      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.role.toLowerCase().includes(searchQuery.toLowerCase());
+const matchesSearch =
+  searchQuery === "" ||
+  employee.date.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  employee.departuretime.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  employee.guest.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  employee.tourguide.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  employee.price.toLowerCase().includes(searchQuery.toLowerCase());
+
 
     return matchesStatus && matchesSearch;
   });
@@ -180,11 +204,13 @@ export default function RouteAvailable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="font-semibold text-foreground">Name</TableHead>
-              <TableHead className="font-semibold text-foreground">Email</TableHead>
-              <TableHead className="font-semibold text-foreground">Department</TableHead>
-              <TableHead className="font-semibold text-foreground">Role</TableHead>
-              <TableHead className="font-semibold text-foreground">Status</TableHead>
+              <TableHead className="font-semibold text-foreground">Available Date</TableHead>
+              <TableHead className="font-semibold text-foreground">Departure Time</TableHead>
+              <TableHead className="font-semibold text-foreground">Guests</TableHead>
+              <TableHead className="font-semibold text-foreground">Tour Guide</TableHead>
+              <TableHead className="font-semibold text-foreground">Price</TableHead>
+              <TableHead className="font-semibold text-foreground">Notes</TableHead>
+              <TableHead className="font-semibold text-foreground">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -201,15 +227,13 @@ export default function RouteAvailable() {
             ) : (
               filteredEmployees.map((employee) => (
                 <TableRow key={employee.id}>
-                  <TableCell className="font-medium">{employee.name}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {employee.email}
-                  </TableCell>
-                  <TableCell>{employee.department}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {employee.role}
-                  </TableCell>
-                  <TableCell>{getStatusBadge(employee.status)}</TableCell>
+                <TableCell className="font-medium">{employee.date}</TableCell>
+                <TableCell className="text-muted-foreground">{employee.departuretime}</TableCell>
+                <TableCell>{employee.guest}</TableCell>
+                <TableCell>{employee.tourguide}</TableCell>
+                <TableCell>{employee.price}</TableCell>
+                <TableCell>{(employee.notes)}</TableCell>
+                <TableCell>{getStatusBadge(employee.status)}</TableCell>
                 </TableRow>
               ))
             )}

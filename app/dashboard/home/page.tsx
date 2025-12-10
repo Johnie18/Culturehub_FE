@@ -4,6 +4,7 @@ import { useState } from "react";
 import { HomeTable } from "@/components/dashboard/home-table";
 import LineChart09 from "@/components/dashboard/chart";
 import { Users, MapPin, BookCheckIcon, DollarSign } from "lucide-react";
+import useAuth from "../hooks/page";
 
 // Reusable Card Component
 interface StatCardProps {
@@ -34,6 +35,7 @@ const StatCard = ({
 );
 
 export default function Home() {
+  useAuth();
   const routes = {
     default: "Select Route",
     route1: "Bacolod-North",

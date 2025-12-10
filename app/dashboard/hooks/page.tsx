@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function useAuth(requiredLevel = null) {
+
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 

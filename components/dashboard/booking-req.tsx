@@ -186,19 +186,19 @@ export default function TableActions01() {
                 ID
               </TableHead>
               <TableHead className="min-w-48 font-semibold text-foreground">
-                Task
+                Route
               </TableHead>
               <TableHead className="w-40 font-semibold text-foreground">
-                Assignee
+                Email
               </TableHead>
               <TableHead className="w-32 font-semibold text-foreground">
                 Status
               </TableHead>
               <TableHead className="w-32 font-semibold text-foreground">
-                Due Date
+                Booking Date
               </TableHead>
               <TableHead className="min-w-48 font-semibold text-foreground">
-                Notes
+                Menu Notes
               </TableHead>
               <TableHead className="w-48 text-right font-semibold text-foreground">
                 Actions

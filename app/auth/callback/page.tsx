@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export default function Callback() {
   const params = useSearchParams();
-  const router = useRouter();
+  const router = useRouter(); 
 
   useEffect(() => {
     const token = params.get("access_token");

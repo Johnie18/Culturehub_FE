@@ -166,10 +166,10 @@ export default function TableExpandable01() {
           <TableRow>
             <TableHead className="w-12" />
             <TableHead className="font-semibold text-foreground">Date</TableHead>
-            <TableHead className="font-semibold text-foreground">Merchant</TableHead>
+            <TableHead className="font-semibold text-foreground">Route Name</TableHead>
             <TableHead className="font-semibold text-foreground">Type</TableHead>
             <TableHead className="font-semibold text-foreground">Amount</TableHead>
-            <TableHead className="font-semibold text-foreground">Status</TableHead>
+            <TableHead className="font-semibold text-foreground">Booking Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
