@@ -10,6 +10,7 @@ import {
 import useAuth from "./hooks/page"
 
 export default function Page({ children }: { children: React.ReactNode }) {
+  useAuth();
 
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
 

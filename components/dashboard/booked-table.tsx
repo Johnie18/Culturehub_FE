@@ -11,117 +11,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import axios from "axios";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Transaction {
   id: string;
-  type: "purchase" | "refund" | "subscription";
-  merchant: string;
-  amount: number;
-  date: string;
-  status: "completed" | "pending" | "failed";
-  description: string;
-  paymentMethod: string;
-  transactionId: string;
-  category: string;
+  booking_date: string;
+  total_price: number;
+  booking_status: "pending" | "completed" | "failed"; // adapt if needed
+  availability_id: number;
+  total_guests: number;
 }
 
-const sampleTransactions: Transaction[] = [
-  {
-    id: "1",
-    type: "purchase",
-    merchant: "Amazon",
-    amount: 157.99,
-    date: "2024-01-15",
-    status: "completed",
-    description: "Wireless mechanical keyboard with RGB backlighting and hot-swappable switches",
-    paymentMethod: "Visa •••• 4242",
-    transactionId: "TXN-2024-001-ABC",
-    category: "Electronics",
-  },
-  {
-    id: "2",
-    type: "subscription",
-    merchant: "Netflix",
-    amount: 15.99,
-    date: "2024-01-14",
-    status: "completed",
-    description: "Monthly subscription - Premium plan with 4K streaming",
-    paymentMethod: "Mastercard •••• 5555",
-    transactionId: "TXN-2024-002-DEF",
-    category: "Entertainment",
-  },
-  {
-    id: "3",
-    type: "purchase",
-    merchant: "Whole Foods",
-    amount: 87.43,
-    date: "2024-01-13",
-    status: "completed",
-    description: "Weekly grocery shopping including organic produce and essentials",
-    paymentMethod: "Visa •••• 4242",
-    transactionId: "TXN-2024-003-GHI",
-    category: "Groceries",
-  },
-  {
-    id: "4",
-    type: "refund",
-    merchant: "Best Buy",
-    amount: 45.00,
-    date: "2024-01-12",
-    status: "pending",
-    description: "Refund for returned HDMI cable that was incompatible",
-    paymentMethod: "Visa •••• 4242",
-    transactionId: "TXN-2024-004-JKL",
-    category: "Electronics",
-  },
-  {
-    id: "5",
-    type: "purchase",
-    merchant: "Uber",
-    amount: 23.50,
-    date: "2024-01-11",
-    status: "completed",
-    description: "Ride from downtown to airport terminal 2",
-    paymentMethod: "Amex •••• 1234",
-    transactionId: "TXN-2024-005-MNO",
-    category: "Transportation",
-  },
-  {
-    id: "6",
-    type: "purchase",
-    merchant: "Starbucks",
-    amount: 12.75,
-    date: "2024-01-10",
-    status: "failed",
-    description: "Morning coffee and pastry - payment declined due to insufficient funds",
-    paymentMethod: "Visa •••• 4242",
-    transactionId: "TXN-2024-006-PQR",
-    category: "Food & Dining",
-  },
-];
-
-function getTypeBadge(type: Transaction["type"]) {
-  switch (type) {
-    case "purchase":
-      return <Badge variant="default">Purchase</Badge>;
-    case "refund":
-      return (
-        <Badge className="border-green-200 text-green-700" variant="outline">
-          Refund
-        </Badge>
-      );
-    case "subscription":
-      return (
-        <Badge className="border-purple-200 text-purple-700" variant="outline">
-          Subscription
-        </Badge>
-      );
-  }
-}
-
-function getStatusBadge(status: Transaction["status"]) {
+function getStatusBadge(status: Transaction["booking_status"]) {
   switch (status) {
     case "completed":
       return (
@@ -137,10 +40,16 @@ function getStatusBadge(status: Transaction["status"]) {
       );
     case "failed":
       return (
-        <Badge className="border-red-200 text-red-700" variant="outline">
+        <Badge className="border-red-200 text-red-700" variant="destructive">
           Failed
         </Badge>
       );
+      default:
+        return(
+        <Badge className="border-red-200 text-red-700" variant="secondary">
+          {status}
+        </Badge>
+        )
   }
 }
 
@@ -148,6 +57,22 @@ export const title = "Table with Expandable Rows";
 
 export default function TableExpandable01() {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [bookings, setBookings] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+try{
+      const token = localStorage.getItem("access_token");
+      const res = await axios.get("http://localhost:3000/bookings", {
+        headers: {Authorization: `Bearer ${token}`}
+      });
+      setBookings(res.data);
+    }catch(err){
+      console.error("Failed to Fetch Bookings", err);
+    }
+  }
+    fetchData();
+  }, []);
 
   const toggleRow = (id: string) => {
     const newExpanded = new Set(expandedIds);
@@ -166,14 +91,14 @@ export default function TableExpandable01() {
           <TableRow>
             <TableHead className="w-12" />
             <TableHead className="font-semibold text-foreground">Date</TableHead>
-            <TableHead className="font-semibold text-foreground">Route Name</TableHead>
-            <TableHead className="font-semibold text-foreground">Type</TableHead>
+            <TableHead className="font-semibold text-foreground">Booking ID</TableHead>
+            <TableHead className="font-semibold text-foreground">Total Guests</TableHead>
             <TableHead className="font-semibold text-foreground">Amount</TableHead>
             <TableHead className="font-semibold text-foreground">Booking Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sampleTransactions.map((transaction) => {
+          {bookings.map((transaction) => {
             const isExpanded = expandedIds.has(transaction.id);
             return [
               <TableRow key={transaction.id}>
@@ -193,17 +118,18 @@ export default function TableExpandable01() {
                   </Button>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {transaction.date}
+                  {transaction.booking_date}
                 </TableCell>
                 <TableCell className="font-medium">
-                  {transaction.merchant}
+                  {transaction.id}
                 </TableCell>
-                <TableCell>{getTypeBadge(transaction.type)}</TableCell>
+                <TableCell className="font-medium">
+                  {transaction.total_guests}
+                  </TableCell>
                 <TableCell className="font-mono font-semibold">
-                  {transaction.type === "refund" ? "+" : "-"}$
-                  {transaction.amount.toFixed(2)}
+                  ${Number(transaction.total_price).toFixed(2)}
                 </TableCell>
-                <TableCell>{getStatusBadge(transaction.status)}</TableCell>
+                <TableCell>{getStatusBadge(transaction.booking_status)}</TableCell>
               </TableRow>,
               <TableRow key={`${transaction.id}-details`} className="hover:bg-transparent">
                 <TableCell colSpan={6} className="p-0">
@@ -216,27 +142,27 @@ export default function TableExpandable01() {
                     <div className="border-border border-t bg-muted/30 p-4">
                       <div className="grid gap-3">
                         <div>
-                          <p className="text-sm font-medium">Description</p>
+                          <p className="text-sm font-medium">Availability ID</p>
                           <p className="text-sm text-muted-foreground">
-                            {transaction.description}
+                            {transaction.availability_id}
                           </p>
                         </div>
                         <div className="grid grid-cols-3 gap-4">
                           <div>
-                            <p className="text-sm font-medium">Payment Method</p>
+                            <p className="text-sm font-medium">Guests</p>
                             <p className="text-sm text-muted-foreground">
-                              {transaction.paymentMethod}
+                              {transaction.total_guests}
                             </p>
                           </div>
                           <div>
-                            <p className="text-sm font-medium">Transaction ID</p>
+                            <p className="text-sm font-medium">Total Price</p>
                             <p className="font-mono text-sm text-muted-foreground">
-                              {transaction.transactionId}
+                              {Number(transaction.total_price).toFixed(2)}
                             </p>
                           </div>
                           <div>
                             <p className="text-sm font-medium">Category</p>
-                            <Badge variant="secondary">{transaction.category}</Badge>
+                            <Badge variant="secondary">{transaction.availability_id}</Badge>
                           </div>
                         </div>
                       </div>

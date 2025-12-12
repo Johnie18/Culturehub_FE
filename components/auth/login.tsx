@@ -20,9 +20,7 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
 
-    const router = useRouter();
-
-
+  const router = useRouter();
 
   const handleGoogleLogin = async () => {
     try {

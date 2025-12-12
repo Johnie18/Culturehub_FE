@@ -30,7 +30,7 @@ import { useState } from "react";
 type TaskStatus = "pending" | "in-progress" | "completed" | "blocked";
 
 interface Task {
-  id: string;
+  total: string;
   title: string;
   assignee: {
     name: string;
@@ -44,7 +44,7 @@ interface Task {
 
 const sampleTasks: Task[] = [
   {
-    id: "TSK-001",
+    total: "3/$450",
     title: "Design new landing page",
     assignee: {
       name: "Sarah Chen",
@@ -55,7 +55,7 @@ const sampleTasks: Task[] = [
     notes: "Follow brand guidelines v2.0",
   },
   {
-    id: "TSK-002",
+    total: "3/$450",
     title: "Implement authentication flow",
     assignee: {
       name: "Alex Kumar",
@@ -66,7 +66,7 @@ const sampleTasks: Task[] = [
     notes: "Use OAuth 2.0 with JWT",
   },
   {
-    id: "TSK-003",
+    total: "3/$450",
     title: "Write API documentation",
     assignee: {
       name: "Emma Wilson",
@@ -77,7 +77,7 @@ const sampleTasks: Task[] = [
     notes: "Include code examples",
   },
   {
-    id: "TSK-004",
+    total: "3/$450",
     title: "Fix mobile responsive issues",
     assignee: {
       name: "James Park",
@@ -88,7 +88,7 @@ const sampleTasks: Task[] = [
     notes: "Waiting for design assets",
   },
   {
-    id: "TSK-005",
+    total: "3/$450",
     title: "Optimize database queries",
     assignee: {
       name: "Maya Patel",
@@ -99,7 +99,7 @@ const sampleTasks: Task[] = [
     notes: "Focus on user table first",
   },
   {
-    id: "TSK-006",
+    total: "3/$450",
     title: "Set up CI/CD pipeline",
     assignee: {
       name: "Ryan Lee",
@@ -149,7 +149,7 @@ export default function TableActions01() {
     // Set pending state
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === taskId ? { ...task, pendingAction: action } : task
+        task.total === taskId ? { ...task, pendingAction: action } : task
       )
     );
 
@@ -157,7 +157,7 @@ export default function TableActions01() {
     setTimeout(() => {
       setTasks((prev) =>
         prev.map((task) => {
-          if (task.id !== taskId) return task;
+          if (task.total !== taskId) return task;
 
           // Clear pending state and update status based on action
           const updated = { ...task, pendingAction: undefined };
@@ -183,7 +183,7 @@ export default function TableActions01() {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead className="w-24 font-semibold text-foreground">
-                ID
+                Total Guests/Amount
               </TableHead>
               <TableHead className="min-w-48 font-semibold text-foreground">
                 Route
@@ -207,9 +207,9 @@ export default function TableActions01() {
           </TableHeader>
           <TableBody>
             {tasks.map((task) => (
-              <TableRow key={task.id}>
+              <TableRow key={task.total}>
                 <TableCell className="font-mono text-sm text-muted-foreground">
-                  {task.id}
+                  {task.total}
                 </TableCell>
                 <TableCell className="font-medium">{task.title}</TableCell>
                 <TableCell>
@@ -245,7 +245,7 @@ export default function TableActions01() {
                             <Button
                               aria-label="Start task"
                               disabled={task.pendingAction === "start"}
-                              onClick={() => handleAction(task.id, "start")}
+                              onClick={() => handleAction(task.total, "start")}
                               size="icon"
                               variant="ghost"
                             >
@@ -269,7 +269,7 @@ export default function TableActions01() {
                               <Button
                                 aria-label="Pause task"
                                 disabled={task.pendingAction === "pause"}
-                                onClick={() => handleAction(task.id, "pause")}
+                                onClick={() => handleAction(task.total, "pause")}
                                 size="icon"
                                 variant="ghost"
                               >
@@ -291,7 +291,7 @@ export default function TableActions01() {
                                 aria-label="Complete task"
                                 disabled={task.pendingAction === "complete"}
                                 onClick={() =>
-                                  handleAction(task.id, "complete")
+                                  handleAction(task.total, "complete")
                                 }
                                 size="icon"
                                 variant="ghost"
@@ -315,7 +315,7 @@ export default function TableActions01() {
                           <Button
                             aria-label="Delete task"
                             disabled={task.pendingAction === "delete"}
-                            onClick={() => handleAction(task.id, "delete")}
+                            onClick={() => handleAction(task.total, "delete")}
                             size="icon"
                             variant="ghost"
                           >
@@ -336,7 +336,7 @@ export default function TableActions01() {
                           <Button
                             aria-label="View task details"
                             disabled={task.pendingAction === "view"}
-                            onClick={() => handleAction(task.id, "view")}
+                            onClick={() => handleAction(task.total, "view")}
                             size="icon"
                             variant="ghost"
                           >
