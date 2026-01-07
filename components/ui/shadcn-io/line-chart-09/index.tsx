@@ -80,7 +80,7 @@ export function ChartLineLabel() {
                 className="fill-foreground"
                 fontSize={12}
               />
-            </Line>
+            </Line>1
           </LineChart>
         </ChartContainer>
       </div>

@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import { AppSidebar } from "@/components/dashboard/app-sidebar"
+import { AppSidebar } from "@/app/dashboard/components/app-sidebar"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -8,10 +8,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import useAuth from "./hooks/page"
+import { SkeletonCard } from "./components/skeleton"
 
 export default function Page({ children }: { children: React.ReactNode }) {
-  useAuth();
-
+  const authLoading = useAuth();
+  const [seconds, setSeconds] = useState(0);
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
 
   useEffect(() => {
@@ -36,28 +37,35 @@ export default function Page({ children }: { children: React.ReactNode }) {
     hour: "2-digit",
     minute: "2-digit",
   })
-
+    if(authLoading){
+      return(
+    <div className="min-h-screen flex items-center justify-center">
+        <SkeletonCard/>
+    </div>
+    );
+  }
   return (
-    <SidebarProvider>
-      <AppSidebar/>
-      <SidebarInset className="bg-gray-100">
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4 ">
-            <SidebarTrigger className="-ml-1" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
-            />
-            {/* Current Date & Time */}
-            <div className="ml-2 text-sm font-medium">{formattedTime}</div>
-          </div>
-        </header>
+<SidebarProvider>
+  <AppSidebar />
 
-        <div className="flex-1 flex-col gap-4 p-4 pt-0 bg-gray-100">
-          <div className="bg-gray-50 min-h-full flex-1 rounded-xl md:min-h-min" />
-          {children}
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+  <SidebarInset className="flex flex-col bg-gray-100 min-h-screen">
+<header className="sticky top-0 z-50 bg-blue-200 flex h-16 items-center px-4">
+  {/* Left controls */}
+  <div className="flex items-center gap-2">
+    <SidebarTrigger className="-ml-1" />
+    <Separator orientation="vertical" className="h-4 mx-2" />
+  </div>
+
+  <div className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold">
+    WELCOME TO ADMIN DASHBOARD
+  </div>
+</header>
+
+    <main className="flex-1 p-4 bg-gray-100">
+      {children}
+    </main>
+  </SidebarInset>
+</SidebarProvider>
+
   )
 }

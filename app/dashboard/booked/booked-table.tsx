@@ -19,7 +19,7 @@ interface Transaction {
   id: string;
   booking_date: string;
   total_price: number;
-  booking_status: "pending" | "completed" | "failed"; // adapt if needed
+  booking_status: "pending" | "completed" | "failed";
   availability_id: number;
   total_guests: number;
 }
@@ -86,15 +86,15 @@ try{
 
   return (
     <div className="w-full overflow-hidden rounded-lg border border-border bg-card shadow-sm">
-      <Table>
+      <Table className="w-full table-fixed">
         <TableHeader>
           <TableRow>
             <TableHead className="w-12" />
-            <TableHead className="font-semibold text-foreground">Date</TableHead>
-            <TableHead className="font-semibold text-foreground">Booking ID</TableHead>
-            <TableHead className="font-semibold text-foreground">Total Guests</TableHead>
-            <TableHead className="font-semibold text-foreground">Amount</TableHead>
-            <TableHead className="font-semibold text-foreground">Booking Status</TableHead>
+            <TableHead className="font-semibold text-foreground w-1/3">Date</TableHead>
+            <TableHead className="font-semibold text-foreground w-1/6 hidden md:table-cell">Booking ID</TableHead>
+            <TableHead className="font-semibold text-foreground w-1/6 hidden md:table-cell">Total Guests</TableHead>
+            <TableHead className="font-semibold text-foreground w-1/6 hidden md:table-cell">Amount</TableHead>
+            <TableHead className="font-semibold text-foreground w-1/6 hidden md:table-cell">Booking Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -102,7 +102,7 @@ try{
             const isExpanded = expandedIds.has(transaction.id);
             return [
               <TableRow key={transaction.id}>
-                <TableCell>
+                <TableCell className="truncate">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -117,22 +117,22 @@ try{
                     />
                   </Button>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="text-muted-foreground truncate">
                   {transaction.booking_date}
                 </TableCell>
-                <TableCell className="font-medium">
+                <TableCell className="font-medium truncate">
                   {transaction.id}
                 </TableCell>
-                <TableCell className="font-medium">
+                <TableCell className="font-medium truncate">
                   {transaction.total_guests}
                   </TableCell>
-                <TableCell className="font-mono font-semibold">
+                <TableCell className="font-mono font-semibold truncate">
                   ${Number(transaction.total_price).toFixed(2)}
                 </TableCell>
-                <TableCell>{getStatusBadge(transaction.booking_status)}</TableCell>
+                <TableCell className="truncate">{getStatusBadge(transaction.booking_status)}</TableCell>
               </TableRow>,
               <TableRow key={`${transaction.id}-details`} className="hover:bg-transparent">
-                <TableCell colSpan={6} className="p-0">
+                <TableCell colSpan={6} className="p-0 truncate">
                   <div
                     className={cn(
                       "overflow-hidden transition-all duration-300 ease-in-out",

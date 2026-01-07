@@ -62,7 +62,6 @@ const handleLogout = async () => {
   router.push("/auth/login");
 };
 
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>

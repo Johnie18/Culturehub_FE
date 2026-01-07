@@ -1,7 +1,6 @@
 "use client"
 
-import { Availability } from "@/components/dashboard/available-date";
-import MenuTable from "@/components/dashboard/menu-available-table";
+import MenuTable from "@/app/dashboard/food-available/routeAvailability";
 import useAuth from "../hooks/page";
 
 export default function Food(){

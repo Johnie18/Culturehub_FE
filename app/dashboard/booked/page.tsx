@@ -1,5 +1,5 @@
 "use client"
-import BookTable from "@/components/dashboard/booked-table"
+import BookTable from "@/app/dashboard/booked/booked-table"
 import useAuth from "../hooks/page";
 
 export default function Page() {

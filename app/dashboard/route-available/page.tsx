@@ -1,6 +1,6 @@
 "use client"
-import DateAvailable from "@/components/dashboard/calendar";
-import RouteAvailable from "@/components/dashboard/routeAvail-table";
+import DateAvailable from "@/app/dashboard/route-available/calendar";
+import RouteAvailable from "@/app/dashboard/route-available/routeAvail-table";
 import { Button } from "@/components/ui/button";
 import useAuth from "../hooks/page";
 

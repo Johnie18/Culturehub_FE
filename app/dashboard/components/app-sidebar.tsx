@@ -17,7 +17,7 @@ import {
   UtensilsCrossedIcon,
 } from "lucide-react"
 
-import { NavMain } from "@/components/dashboard/nav-main"
+import { NavMain } from "@/app/dashboard/components/nav-main"
 
 import {
   Sidebar,
@@ -88,7 +88,7 @@ const data = {
       items: [
         {
           title: "Booked",
-          url: "/dashboard/book",
+          url: "/dashboard/booked",
           icon: CalendarCheck,
         },
         {

@@ -179,28 +179,28 @@ export default function TableActions01() {
   return (
     <div className="w-full overflow-hidden rounded-lg border border-border bg-card shadow-sm">
       <div className="overflow-x-auto">
-        <Table>
+        <Table className="w-full table-fixed">
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="w-24 font-semibold text-foreground">
+              <TableHead className="w-24 font-semibold text-foreground hidden md:table-cell">
                 Total Guests/Amount
               </TableHead>
-              <TableHead className="min-w-48 font-semibold text-foreground">
+              <TableHead className="min-w-48 font-semibold text-foreground hidden md:table-cell">
                 Route
               </TableHead>
-              <TableHead className="w-40 font-semibold text-foreground">
+              <TableHead className="w-40 font-semibold text-foreground hidden md:table-cell">
                 Email
               </TableHead>
-              <TableHead className="w-32 font-semibold text-foreground">
+              <TableHead className="w-32 font-semibold text-foreground hidden md:table-cell">
                 Status
               </TableHead>
-              <TableHead className="w-32 font-semibold text-foreground">
+              <TableHead className="w-32 font-semibold text-foreground hidden md:table-cell">
                 Booking Date
               </TableHead>
-              <TableHead className="min-w-48 font-semibold text-foreground">
+              <TableHead className="min-w-48 font-semibold text-foreground hidden md:table-cell">
                 Menu Notes
               </TableHead>
-              <TableHead className="w-48 text-right font-semibold text-foreground">
+              <TableHead className="w-48 text-right font-semibold text-foreground hidden md:table-cell">
                 Actions
               </TableHead>
             </TableRow>
@@ -208,11 +208,11 @@ export default function TableActions01() {
           <TableBody>
             {tasks.map((task) => (
               <TableRow key={task.total}>
-                <TableCell className="font-mono text-sm text-muted-foreground">
+                <TableCell className="font-mono text-sm text-muted-foreground hidden md:table-cell truncate">
                   {task.total}
                 </TableCell>
-                <TableCell className="font-medium">{task.title}</TableCell>
-                <TableCell>
+                <TableCell className="font-medium hidden md:table-cell truncate">{task.title}</TableCell>
+                <TableCell className="hidden md:table-cell truncate">
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarImage
@@ -229,14 +229,14 @@ export default function TableActions01() {
                     <span className="text-sm">{task.assignee.name}</span>
                   </div>
                 </TableCell>
-                <TableCell>{getStatusBadge(task.status)}</TableCell>
-                <TableCell className="text-sm text-muted-foreground">
+                <TableCell className="hidden md:table-cell truncate">{getStatusBadge(task.status)}</TableCell>
+                <TableCell className="text-sm text-muted-foreground hidden md:table-cell truncate">
                   {task.dueDate}
                 </TableCell>
-                <TableCell className="text-sm text-muted-foreground">
+                <TableCell className="text-sm text-muted-foreground hidden md:table-cell truncate">
                   {task.notes}
                 </TableCell>
-                <TableCell>
+                <TableCell className="hidden md:table-cell truncate">
                   <TooltipProvider>
                     <div className="flex justify-end gap-1">
                       {task.status === "pending" && (
