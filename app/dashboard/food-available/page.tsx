@@ -4,7 +4,7 @@ import MenuTable from "@/app/dashboard/food-available/routeAvailability";
 import useAuth from "../hooks/page";
 
 export default function Food(){
-    useAuth();
+    useAuth(2);
 
     return(<div>
 <MenuTable/>

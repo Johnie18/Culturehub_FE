@@ -17,7 +17,6 @@ export async function POST(req: Request) {
   const newAvailability = {
     id: Date.now().toString(),
     routeId,
-    menuId: menuId || null,
     availableDate,
     departTime,
     maxGuests: maxGuests || 1,

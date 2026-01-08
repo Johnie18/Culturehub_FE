@@ -17,7 +17,7 @@ import {
   UtensilsCrossedIcon,
 } from "lucide-react"
 
-import { NavMain } from "@/app/dashboard/components/nav-main"
+import { NavMain } from "@/components/dashboard/nav-main"
 
 import {
   Sidebar,
@@ -39,12 +39,6 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: Home,
-      isActive: true,
-      items: [
                 {
           title: "Home",
           url: "/dashboard/home",
@@ -60,14 +54,6 @@ const data = {
           url: "/dashboard/food",
           icon: UtensilsCrossedIcon,
         },
-      ],
-    },
-       {
-      title: "Availability",
-      url: "#",
-      icon: CalendarRange,
-      isActive: true,
-      items: [
         {
           title: "Route Available",
           url: "/dashboard/route-available",
@@ -78,26 +64,16 @@ const data = {
           url: "/dashboard/food-available",
           icon: CookingPot,
         },
-      ],
-    },
-    {
-      title: "Client Data",
-      url: "#",
-      icon: UserCheck2Icon,
-      isActive: true,
-      items: [
         {
-          title: "Booked",
+          title: "Booked Section",
           url: "/dashboard/booked",
           icon: CalendarCheck,
         },
         {
-          title: "Feedback",
+          title: "Feedbacks",
           url: "/dashboard/feedback",
           icon: MessageSquareQuote,
         },
-      ],
-    },
   ],
 }
 
@@ -114,7 +90,6 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
       <SidebarFooter>
       </SidebarFooter>
       <NavUser user={data.user} />
-      <SidebarRail />
     </Sidebar>
   )
 }

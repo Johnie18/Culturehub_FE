@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,349 +10,188 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  CheckCircle,
-  FileText,
-  Loader2,
-  Pause,
-  Play,
-  Trash,
-} from "lucide-react";
-import { useState } from "react";
+import axios from "axios";
+import { FileText, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
 
-type TaskStatus = "pending" | "in-progress" | "completed" | "blocked";
-
-interface Task {
-  total: string;
-  title: string;
-  assignee: {
-    name: string;
-    avatar: string;
-  };
-  status: TaskStatus;
-  dueDate: string;
-  notes: string;
-  pendingAction?: "start" | "pause" | "complete" | "delete" | "view";
+interface Booking {
+  id: number;
+  total_guests: number;
+  booking_status: "pending" | "completed";
+  contact_email: string;
+  booking_date: string;
+  special_requests?: string;
+  route_name?: string;
 }
 
-const sampleTasks: Task[] = [
-  {
-    total: "3/$450",
-    title: "Design new landing page",
-    assignee: {
-      name: "Sarah Chen",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
-    },
-    status: "in-progress",
-    dueDate: "2024-02-15",
-    notes: "Follow brand guidelines v2.0",
-  },
-  {
-    total: "3/$450",
-    title: "Implement authentication flow",
-    assignee: {
-      name: "Alex Kumar",
-      avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100",
-    },
-    status: "pending",
-    dueDate: "2024-02-18",
-    notes: "Use OAuth 2.0 with JWT",
-  },
-  {
-    total: "3/$450",
-    title: "Write API documentation",
-    assignee: {
-      name: "Emma Wilson",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100",
-    },
-    status: "completed",
-    dueDate: "2024-02-10",
-    notes: "Include code examples",
-  },
-  {
-    total: "3/$450",
-    title: "Fix mobile responsive issues",
-    assignee: {
-      name: "James Park",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100",
-    },
-    status: "blocked",
-    dueDate: "2024-02-12",
-    notes: "Waiting for design assets",
-  },
-  {
-    total: "3/$450",
-    title: "Optimize database queries",
-    assignee: {
-      name: "Maya Patel",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
-    },
-    status: "in-progress",
-    dueDate: "2024-02-20",
-    notes: "Focus on user table first",
-  },
-  {
-    total: "3/$450",
-    title: "Set up CI/CD pipeline",
-    assignee: {
-      name: "Ryan Lee",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100",
-    },
-    status: "pending",
-    dueDate: "2024-02-25",
-    notes: "Use GitHub Actions",
-  },
-];
-
-function getStatusBadge(status: TaskStatus) {
+function getBookingStatusBadge(status: Booking["booking_status"]) {
   switch (status) {
     case "pending":
-      return (
-        <Badge className="font-normal" variant="secondary">
-          Pending
-        </Badge>
-      );
-    case "in-progress":
-      return (
-        <Badge className="font-normal" variant="default">
-          In Progress
-        </Badge>
-      );
+      return <Badge variant="secondary">Pending</Badge>;
     case "completed":
       return (
-        <Badge className="border-green-200 font-normal text-green-700" variant="outline">
+        <Badge variant="outline" className="border-green-200 text-green-700">
           Completed
-        </Badge>
-      );
-    case "blocked":
-      return (
-        <Badge className="font-normal" variant="destructive">
-          Blocked
         </Badge>
       );
   }
 }
 
-export const title = "Task Table with Actions";
+export default function BookingsTable() {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default function TableActions01() {
-  const [tasks, setTasks] = useState<Task[]>(sampleTasks);
+  useEffect(() => {
+    async function fetchBookings() {
+      try {
+        const token = localStorage.getItem("access_token");
+        const res = await axios.get("http://localhost:3000/bookings", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBookings(res.data);
+      } catch (err) {
+        console.error("Failed to fetch bookings", err);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const handleAction = (taskId: string, action: Task["pendingAction"]) => {
-    // Set pending state
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.total === taskId ? { ...task, pendingAction: action } : task
-      )
+    fetchBookings();
+  }, []);
+
+  async function handleAccept(id: number) {
+  try {
+    const token = localStorage.getItem("access_token");
+
+    await axios.patch(
+      `http://localhost:3000/bookings/${id}`,
+      { booking_status: "success" },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    // Simulate async operation
-    setTimeout(() => {
-      setTasks((prev) =>
-        prev.map((task) => {
-          if (task.total !== taskId) return task;
+    // remove accepted booking from this table
+    setBookings((prev) => prev.filter((b) => b.id !== id));
 
-          // Clear pending state and update status based on action
-          const updated = { ...task, pendingAction: undefined };
+  } catch (err) {
+    console.error("Failed to accept booking", err);
+  }
+}
 
-          if (action === "start") {
-            updated.status = "in-progress";
-          } else if (action === "pause") {
-            updated.status = "pending";
-          } else if (action === "complete") {
-            updated.status = "completed";
-          }
+async function handleDelete(id: number) {
+  if (!confirm("Delete this booking?")) return;
 
-          return updated;
-        })
-      );
-    }, 1500);
-  };
+  try {
+    const token = localStorage.getItem("access_token");
+
+    await axios.delete(
+      `http://localhost:3000/bookings/${id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // remove deleted booking from table
+    setBookings((prev) => prev.filter((b) => b.id !== id));
+
+  } catch (err) {
+    console.error("Failed to delete booking", err);
+  }
+}
+
+
+  if (loading) {
+    return <div className="p-4 text-sm text-muted-foreground">Loading bookings...</div>;
+  }
 
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+    <div className="w-full overflow-hidden rounded-lg border bg-card shadow-sm">
       <div className="overflow-x-auto">
-        <Table className="w-full table-fixed">
+        <Table className="w-full">
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="w-24 font-semibold text-foreground hidden md:table-cell">
-                Total Guests/Amount
+              <TableHead>Route</TableHead>
+              <TableHead>Status</TableHead>
+
+              <TableHead className="hidden md:table-cell">
+                Total Guests
               </TableHead>
-              <TableHead className="min-w-48 font-semibold text-foreground hidden md:table-cell">
-                Route
-              </TableHead>
-              <TableHead className="w-40 font-semibold text-foreground hidden md:table-cell">
+              <TableHead className="hidden md:table-cell">
                 Email
               </TableHead>
-              <TableHead className="w-32 font-semibold text-foreground hidden md:table-cell">
-                Status
-              </TableHead>
-              <TableHead className="w-32 font-semibold text-foreground hidden md:table-cell">
+              <TableHead className="hidden md:table-cell">
                 Booking Date
               </TableHead>
-              <TableHead className="min-w-48 font-semibold text-foreground hidden md:table-cell">
-                Menu Notes
+              <TableHead className="hidden md:table-cell">
+                Notes
               </TableHead>
-              <TableHead className="w-48 text-right font-semibold text-foreground hidden md:table-cell">
-                Actions
-              </TableHead>
+
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
-            {tasks.map((task) => (
-              <TableRow key={task.total}>
-                <TableCell className="font-mono text-sm text-muted-foreground hidden md:table-cell truncate">
-                  {task.total}
+            {bookings.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center text-muted-foreground">
+                  No bookings found
                 </TableCell>
-                <TableCell className="font-medium hidden md:table-cell truncate">{task.title}</TableCell>
-                <TableCell className="hidden md:table-cell truncate">
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage
-                        alt={task.assignee.name}
-                        src={task.assignee.avatar}
-                      />
-                      <AvatarFallback>
-                        {task.assignee.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm">{task.assignee.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="hidden md:table-cell truncate">{getStatusBadge(task.status)}</TableCell>
-                <TableCell className="text-sm text-muted-foreground hidden md:table-cell truncate">
-                  {task.dueDate}
-                </TableCell>
-                <TableCell className="text-sm text-muted-foreground hidden md:table-cell truncate">
-                  {task.notes}
-                </TableCell>
-                <TableCell className="hidden md:table-cell truncate">
-                  <TooltipProvider>
-                    <div className="flex justify-end gap-1">
-                      {task.status === "pending" && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              aria-label="Start task"
-                              disabled={task.pendingAction === "start"}
-                              onClick={() => handleAction(task.total, "start")}
-                              size="icon"
-                              variant="ghost"
-                            >
-                              {task.pendingAction === "start" ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <Play className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Start task</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
+              </TableRow>
+            )}
 
-                      {task.status === "in-progress" && (
-                        <>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                aria-label="Pause task"
-                                disabled={task.pendingAction === "pause"}
-                                onClick={() => handleAction(task.total, "pause")}
-                                size="icon"
-                                variant="ghost"
-                              >
-                                {task.pendingAction === "pause" ? (
-                                  <Loader2 className="h-4 w-4 animate-spin" />
-                                ) : (
-                                  <Pause className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Pause task</p>
-                            </TooltipContent>
-                          </Tooltip>
-
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                aria-label="Complete task"
-                                disabled={task.pendingAction === "complete"}
-                                onClick={() =>
-                                  handleAction(task.total, "complete")
-                                }
-                                size="icon"
-                                variant="ghost"
-                              >
-                                {task.pendingAction === "complete" ? (
-                                  <Loader2 className="h-4 w-4 animate-spin" />
-                                ) : (
-                                  <CheckCircle className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Complete task</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </>
-                      )}
-
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            aria-label="Delete task"
-                            disabled={task.pendingAction === "delete"}
-                            onClick={() => handleAction(task.total, "delete")}
-                            size="icon"
-                            variant="ghost"
-                          >
-                            {task.pendingAction === "delete" ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Trash className="h-4 w-4" />
-                            )}
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Delete task</p>
-                        </TooltipContent>
-                      </Tooltip>
-
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            aria-label="View task details"
-                            disabled={task.pendingAction === "view"}
-                            onClick={() => handleAction(task.total, "view")}
-                            size="icon"
-                            variant="ghost"
-                          >
-                            {task.pendingAction === "view" ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <FileText className="h-4 w-4" />
-                            )}
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>View details</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TooltipProvider>
+            {bookings.map((booking) => (
+              <TableRow key={booking.id}>
+                {/* Mobile-visible */}
+                <TableCell className="font-medium">
+                  {booking.route_name ?? "Unknow Route"}
                 </TableCell>
+
+                <TableCell>
+                  {getBookingStatusBadge(booking.booking_status)}
+                </TableCell>
+
+                {/* Desktop-only */}
+                <TableCell className="hidden md:table-cell">
+                  {booking.total_guests}
+                </TableCell>
+
+                <TableCell className="hidden md:table-cell">
+                  {booking.contact_email}
+                </TableCell>
+
+                <TableCell className="hidden md:table-cell">
+                  {booking.booking_date}
+                </TableCell>
+
+                <TableCell className="hidden md:table-cell truncate max-w-xs">
+                  {booking.special_requests || "—"}
+                </TableCell>
+
+                {/* Actions */}
+      <TableCell className="text-right">
+        <div className="flex justify-end gap-1">
+
+          {/* ACCEPT booking */}
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="Accept booking"
+              onClick={() => handleAccept(booking.id)}
+            >
+              <span className="text-green-600 font-bold">✓</span>
+            </Button>
+
+          {/* DELETE booking */}
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="Delete booking"
+              onClick={() => handleDelete(booking.id)}
+            >
+              <Trash className="h-4 w-4 text-red-500" />
+            </Button>
+
+        </div>
+      </TableCell>
+
+
               </TableRow>
             ))}
           </TableBody>

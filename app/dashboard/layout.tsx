@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import { AppSidebar } from "@/app/dashboard/components/app-sidebar"
+import  AppSidebar  from "@/components/dashboard/app-sidebar"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -8,7 +8,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import useAuth from "./hooks/page"
-import { SkeletonCard } from "./components/skeleton"
+import { SkeletonCard } from "@/components/dashboard/skeleton"
 
 export default function Page({ children }: { children: React.ReactNode }) {
   const authLoading = useAuth();

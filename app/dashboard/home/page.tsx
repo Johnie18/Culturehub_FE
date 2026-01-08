@@ -8,7 +8,7 @@ import useAuth from "../hooks/page";
 import StatCard from "./StatCard";
 
 export default function Home() {
-   useAuth();
+   useAuth(2);
 
 
   const routes = {
@@ -81,7 +81,7 @@ export default function Home() {
       </div>
 
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-  <div className="col-span-2 bg-white rounded-3xl p-4 shadow-sm">
+  <div className="col-span-2 bg-white rounded-3xl p-4 shadow-sm overflow-x-auto">
       <HomeTable />
   </div>
 
