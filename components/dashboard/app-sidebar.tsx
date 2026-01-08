@@ -3,17 +3,11 @@
 import * as React from "react"
 import {
   CalendarCheck,
-  CalendarRange,
   ClipboardListIcon,
   CookingPot,
   Home,
-  icons,
   MessageSquareQuote,
   Route,
-  Shield,
-  SquareTerminal,
-  UserCheck,
-  UserCheck2Icon,
   UtensilsCrossedIcon,
 } from "lucide-react"
 

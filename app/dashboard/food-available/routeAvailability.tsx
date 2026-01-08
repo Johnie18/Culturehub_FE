@@ -105,28 +105,19 @@ export default function RouteAvailabilityCards() {
     });
   };
 
-const addMenu = (cardIndex: number) => {
-  setCards((prev) => {
-    const copy = [...prev];
-    const card = copy[cardIndex];
-
-    // Ensure we have a menus array
-    if (!card.menus) card.menus = [];
-
-    // Add only one blank editable menu
-    card.menus.push({
-      id: crypto.randomUUID(),
-      name: "",
-      image: "",
-      price: undefined,
-      quantity: undefined,
+  const addMenu = (cardIndex: number) => {
+    setCards((prev) => {
+      const copy = [...prev];
+      const menus = copy[cardIndex].menus || [];
+      menus.push({
+        id: crypto.randomUUID(),
+        name: "",
+        image: "",
+      });
+      copy[cardIndex].menus = menus;
+      return copy;
     });
-
-    copy[cardIndex] = card;
-    return copy;
-  });
-};
-
+  };
 
   /* ================= IMAGE UPLOAD ================= */
 
